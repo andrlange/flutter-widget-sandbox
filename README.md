@@ -13,6 +13,9 @@ This project demonstrates a Widget Sandbox service that seamlessly integrates wi
 - **API Fallback** for missing translations (in development)
 - **Category-based Loading** for performance optimization
 
+
+![Example Image](assets/images/example.png)
+
 ## ✨ Key Features
 
 ### 🌍 Advanced Translation System
@@ -36,6 +39,27 @@ This project demonstrates a Widget Sandbox service that seamlessly integrates wi
 ### 🏗️ State Management Integration
 - **Bloc/Cubit compatibility** for reactive UI updates
 - **Error handling** and loading states
+
+## 🔧 Getting Started
+- **Clode this Repo**
+- **Fetch flutter dependencies**
+```bash
+flutter pub get # fetches all dependencies used in pubspec.yaml
+```
+- **Run build_runner**
+```bash
+dart run build_runner build # runs the build_runner to auto generate widgbook directories
+```
+- **Start for target web or macos**
+```bash
+flutter run -d chrome # runs the Widgebook App in chrome
+```
+- **Create UML Diagram**
+```bash
+dart pub global activate dcdg # activates dcdg uml generator
+chmod +x uml.sh
+./uml.sh # creates a plantUml file in uml subfolder
+```
 
 ## 🔧 Core Components
 
