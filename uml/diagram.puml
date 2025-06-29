@@ -1,0 +1,298 @@
+@startuml
+set namespaceSeparator ::
+
+class "widgetbook_example::widgetbook::widgetbook.dart::TranslationAddon" {
+  +List<Field<dynamic>> fields
+  +Widget buildUseCase()
+  -dynamic _switchLanguage()
+  -String _getLanguageName()
+  +String valueFromQueryGroup()
+}
+
+"widgetbook::src::addons::common::widgetbook_addon.dart::WidgetbookAddon" <|-- "widgetbook_example::widgetbook::widgetbook.dart::TranslationAddon"
+
+class "widgetbook_example::widgetbook::widgetbook.dart::WidgetBookSandbox" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::widgetbook::widgetbook.dart::WidgetBookSandbox"
+
+class "widgetbook_example::widgetbook::views::demo::demo_view.dart::DemoView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::widgetbook::views::demo::demo_view.dart::DemoView"
+
+class "widgetbook_example::widgetbook::translations::widgetbook_translation_addon.dart::TranslationAddon" {
+  +List<Field<dynamic>> fields
+  +Widget buildUseCase()
+  -dynamic _switchLanguage()
+  +String valueFromQueryGroup()
+}
+
+"widgetbook::src::addons::common::widgetbook_addon.dart::WidgetbookAddon" <|-- "widgetbook_example::widgetbook::translations::widgetbook_translation_addon.dart::TranslationAddon"
+
+class "widgetbook_example::widgetbook::translations::widgetbook_translation_addon.dart::EnhancedTranslationService" {
+  -Map<String, String> _syncCache
+  +String translateSync()
+  -String _interpolateParametersSync()
+}
+
+"widgetbook_example::src::internationalization::translation_service.dart::TranslationService" <|-- "widgetbook_example::widgetbook::translations::widgetbook_translation_addon.dart::EnhancedTranslationService"
+
+class "widgetbook_example::widgetbook::translations::widgetbook_translation_addon.dart::WidgetbookTranslationManager" {
+  {static} +dynamic preloadAllCategories()
+}
+
+class "widgetbook_example::widgetbook::services::service_locator.dart::ServiceLocator" {
+  {static} +dynamic setup()
+}
+
+class "widgetbook_example::widgetbook::devices::layout_devices.dart::LayoutDevices" {
+  {static} -DeviceInfo _smallPhone
+  {static} -DeviceInfo _mediumPhone
+  {static} -DeviceInfo _mediumTablet
+  {static} -DeviceInfo _mediumDesktop
+  +DeviceInfo smallPhone
+  +DeviceInfo mediumPhone
+  +DeviceInfo mediumTablet
+  +DeviceInfo mediumDesktop
+}
+
+"widgetbook_example::widgetbook::devices::layout_devices.dart::LayoutDevices" o-- "device_frame_plus::src::info::info.dart::DeviceInfo"
+
+abstract class "widgetbook_example::widgetbook::devices::cool_devices.dart::CoolDevices" {
+  {static} +LayoutDevices layout
+}
+
+"widgetbook_example::widgetbook::devices::cool_devices.dart::CoolDevices" o-- "widgetbook_example::widgetbook::devices::layout_devices.dart::LayoutDevices"
+
+class "widgetbook_example::src::statemanagement::disposer.dart::Disposer" {
+  +void Function() dispose
+  +DisposerState createState()
+}
+
+"widgetbook_example::src::statemanagement::disposer.dart::Disposer" o-- "null::void Function()"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "widgetbook_example::src::statemanagement::disposer.dart::Disposer"
+
+class "widgetbook_example::src::statemanagement::disposer.dart::DisposerState" {
+  +Widget build()
+  +void dispose()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "widgetbook_example::src::statemanagement::disposer.dart::DisposerState"
+
+class "widgetbook_example::src::responsive::responsive_extension.dart::Breakpoints" {
+  {static} +double tiny
+  {static} +double mobile
+  {static} +double tablet
+  {static} +double desktop
+  {static} +double largeDesktop
+}
+
+class "widgetbook_example::src::responsive::responsive_extension.dart::ResponsiveSize" {
+  {static} +double fontSize()
+  {static} +double widthPercent()
+  {static} +double heightPercent()
+  {static} +double responsive()
+}
+
+class "widgetbook_example::src::responsive::responsive_extension.dart::ResponsiveBuilder" {
+  +Widget Function(BuildContext, DeviceType)? builder
+  +Widget? tiny
+  +Widget? mobile
+  +Widget? tablet
+  +Widget? desktop
+  +Widget? largeDesktop
+  +Widget? defaultWidget
+  +Widget build()
+}
+
+"widgetbook_example::src::responsive::responsive_extension.dart::ResponsiveBuilder" o-- "null::Widget Function(BuildContext, DeviceType)"
+"widgetbook_example::src::responsive::responsive_extension.dart::ResponsiveBuilder" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::src::responsive::responsive_extension.dart::ResponsiveBuilder"
+
+class "widgetbook_example::src::responsive::responsive_extension.dart::DeviceType" {
+  +int index
+  {static} +List<DeviceType> values
+  {static} +DeviceType tiny
+  {static} +DeviceType mobile
+  {static} +DeviceType tablet
+  {static} +DeviceType desktop
+  {static} +DeviceType largeDesktop
+}
+
+"widgetbook_example::src::responsive::responsive_extension.dart::DeviceType" o-- "widgetbook_example::src::responsive::responsive_extension.dart::DeviceType"
+"dart::core::Enum" <|-- "widgetbook_example::src::responsive::responsive_extension.dart::DeviceType"
+
+class "widgetbook_example::src::internationalization::translation_service.dart::TranslationService" {
+  {static} -String _defaultCategory
+  {static} -String _fallbackLocale
+  -Map<String, TranslationCategory> _categories
+  -Map<String, String> _cache
+  -String _currentLocale
+  -List<String> _supportedLocales
+  -String _baseApiUrl
+  -String _apiKey
+  +String currentLocale
+  +List<String> supportedLocales
+  +dynamic initialize()
+  +dynamic setLocale()
+  +dynamic loadCategory()
+  -dynamic _loadCategoryFromLocal()
+  +dynamic translate()
+  +String translateSync()
+  -dynamic _fetchFromApi()
+  -String _interpolateParameters()
+  +bool isCategoryLoaded()
+  +String? getTranslationFromCategory()
+  +void addTranslationToCategory()
+  +Map<String, String> getCategoryTranslations()
+}
+
+"widgetbook_example::src::internationalization::translation_service_interface.dart::ITranslationService" <|-- "widgetbook_example::src::internationalization::translation_service.dart::TranslationService"
+
+class "widgetbook_example::src::internationalization::translation_models.dart::TranslationItem" {
+  +String key
+  +String value
+  +String category
+  +String locale
+  +Map<String, dynamic> toJson()
+}
+
+class "widgetbook_example::src::internationalization::translation_models.dart::TranslationCategory" {
+  +String name
+  +Map<String, Map<String, String>> translations
+  +bool isLoaded
+  +void addTranslation()
+  +String? getTranslation()
+}
+
+class "widgetbook_example::src::internationalization::translation_persistance.dart::TranslationPersistence" {
+  {static} -String _cacheKeyPrefix
+  {static} -String _categoryLoadedPrefix
+  {static} -String _lastUpdatePrefix
+  {static} +dynamic saveCategoryTranslations()
+  {static} +dynamic loadCategoryTranslations()
+  {static} +dynamic isCategoryStale()
+  {static} +dynamic clearCache()
+}
+
+abstract class "widgetbook_example::src::internationalization::translation_service_interface.dart::ITranslationService" {
+  +String currentLocale
+  +List<String> supportedLocales
+  +dynamic initialize()
+  +dynamic translate()
+  +String translateSync()
+  +dynamic loadCategory()
+  +dynamic setLocale()
+  +bool isCategoryLoaded()
+}
+
+class "widgetbook_example::src::internationalization::translation_widget.dart::TranslatedText" {
+  +String translationKey
+  +String? category
+  +Map<String, dynamic>? parameters
+  +List<dynamic>? args
+  +TextStyle? style
+  +TextAlign? textAlign
+  +int? maxLines
+  +TextOverflow? overflow
+  +Widget build()
+}
+
+"widgetbook_example::src::internationalization::translation_widget.dart::TranslatedText" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"widgetbook_example::src::internationalization::translation_widget.dart::TranslatedText" o-- "dart::ui::TextAlign"
+"widgetbook_example::src::internationalization::translation_widget.dart::TranslatedText" o-- "flutter::src::painting::text_painter.dart::TextOverflow"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::src::internationalization::translation_widget.dart::TranslatedText"
+
+class "widgetbook_example::src::internationalization::translation_widget.dart::TranslationHelper" {
+  {static} +dynamic preloadCategories()
+  {static} +dynamic switchLanguage()
+  {static} +bool isCategoryLoaded()
+}
+
+class "widgetbook_example::src::internationalization::translation_api_service.dart::TranslationApiService" {
+  +String baseUrl
+  +String apiKey
+  +Duration timeout
+  +dynamic translateBatch()
+  +dynamic translateSingle()
+  +dynamic reportMissingTranslation()
+}
+
+class "widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::CoolActionButton" {
+  -void Function() _onPressed
+  -ButtonActionType _buttonType
+  +bool showText
+  +bool showIcon
+  +Widget build()
+  -Widget _buildButton()
+}
+
+"widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::CoolActionButton" o-- "dart::ui::void Function()"
+"widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::CoolActionButton" o-- "widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::ButtonActionType"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::CoolActionButton"
+
+class "widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::ButtonActionType" {
+  +int index
+  {static} +List<ButtonActionType> values
+  {static} +ButtonActionType print
+  {static} +ButtonActionType add
+  {static} +ButtonActionType delete
+  {static} +ButtonActionType save
+}
+
+"widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::ButtonActionType" o-- "widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::ButtonActionType"
+"dart::core::Enum" <|-- "widgetbook_example::src::widgets::core::buttons::cool_action_button.dart::ButtonActionType"
+
+class "widgetbook_example::src::widgets::core::images::cool_image.dart::CoolImage" {
+  +Color borderColor
+  +String imageFile
+  +Widget build()
+}
+
+"widgetbook_example::src::widgets::core::images::cool_image.dart::CoolImage" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::src::widgets::core::images::cool_image.dart::CoolImage"
+
+class "widgetbook_example::src::widgets::core::selectors::cool_radio_group.dart::CoolRadioGroup" {
+  +Map<String, T> options
+  +T initialValue
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::src::widgets::core::selectors::cool_radio_group.dart::CoolRadioGroup"
+
+class "widgetbook_example::src::widgets::core::selectors::cool_radio_group.dart::_CoolRadioGroup" {
+  +Map<String, T> options
+  +CoolRadioGroupCubit<dynamic> cubit
+  +T initialValue
+  +Widget build()
+  -Widget _buildRadioTile()
+}
+
+"widgetbook_example::src::widgets::core::selectors::cool_radio_group.dart::_CoolRadioGroup" o-- "widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupCubit<dynamic>"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "widgetbook_example::src::widgets::core::selectors::cool_radio_group.dart::_CoolRadioGroup"
+
+class "widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupCubit" {
+  +dynamic dispose()
+  +void setValue()
+}
+
+"bloc::src::cubit.dart::Cubit" <|-- "widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupCubit"
+
+class "widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupState" {
+  +List<Object> props
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupState"
+
+class "widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupValue" {
+  +T newValue
+  +List<Object> props
+}
+
+"widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupState" <|-- "widgetbook_example::src::widgets::core::selectors::states::cool_radio_group_cubit.dart::CoolRadioGroupValue"
+
+
+@enduml

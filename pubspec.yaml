@@ -1,0 +1,44 @@
+name: widgetbook_example
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  widgetbook: ^3.14.3
+  widgetbook_annotation: ^3.5.0
+  flutter_bloc: ^9.1.1
+  http: ^1.4.0
+  get_it: ^8.0.3
+  shared_preferences: ^2.5.3
+  intl: ^0.20.2
+  equatable: ^2.0.7
+  bloc: ^9.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  widgetbook_generator: ^3.13.0
+  build_runner: ^2.5.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/translations/
+    - assets/images/
+
+
+
+
+

@@ -1,0 +1,11 @@
+{
+  "action.button.print": "Print",
+  "action.button.save": "Save",
+  "action.button.add": "Add",
+  "action.button.delete": "Delete",
+
+  "option.demo.one": "Demo Option One",
+  "option.demo.two": "Demo Option Two",
+  "option.demo.three": "Demo Option Three",
+  "option.demo.four": "Demo Option Four"
+}

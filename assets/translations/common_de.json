@@ -1,0 +1,11 @@
+{
+  "action.button.print": "Drucken",
+  "action.button.save": "Speichern",
+  "action.button.add": "Zufügen",
+  "action.button.delete": "Löschen",
+
+  "option.demo.one": "Demo Option Eins",
+  "option.demo.two": "Demo Option Zwei",
+  "option.demo.three": "Demo Option Drei",
+  "option.demo.four": "Demo Option Vier"
+}
