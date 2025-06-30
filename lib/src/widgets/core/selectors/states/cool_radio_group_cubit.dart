@@ -8,8 +8,6 @@ class CoolRadioGroupCubit<T> extends Cubit<CoolRadioGroupState> {
   CoolRadioGroupCubit(T initialValue)
     : super(CoolRadioGroupValue(newValue: initialValue));
 
-  T? _oldValue;
-
   Future<void> dispose() async {
     debugPrint('CoolRadioGroupCubit disposing');
 
@@ -17,11 +15,6 @@ class CoolRadioGroupCubit<T> extends Cubit<CoolRadioGroupState> {
   }
 
   void setValue(T newValue) {
-    emit(
-      CoolRadioGroupValue(newValue: (newValue != _oldValue) ? newValue : null),
-    );
-    if (newValue != _oldValue) {
-      _oldValue = newValue;
-    }
+    emit(CoolRadioGroupValue(newValue: newValue));
   }
 }
