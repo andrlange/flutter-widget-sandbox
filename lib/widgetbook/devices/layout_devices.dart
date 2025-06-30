@@ -8,7 +8,7 @@ class LayoutDevices {
   static final _smallPhone = DeviceInfo.genericPhone(
     platform: TargetPlatform.android,
     name: 'Small Phone',
-    id: 'medium',
+    id: 'small',
     screenSize: const Size(382, 712),
     safeAreas: const EdgeInsets.only(
       left: 0.0,

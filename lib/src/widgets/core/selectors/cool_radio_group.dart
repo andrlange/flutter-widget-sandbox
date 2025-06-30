@@ -7,11 +7,13 @@ import '/src/widgets/core/selectors/states/cool_radio_group_cubit.dart';
 class CoolRadioGroup<T> extends StatelessWidget {
   final Map<String, T> options;
   final T initialValue;
+  final bool clearable;
 
   const CoolRadioGroup({
     super.key,
     required this.options,
     required this.initialValue,
+    this.clearable = false,
   });
 
   @override
@@ -23,6 +25,7 @@ class CoolRadioGroup<T> extends StatelessWidget {
         options: options,
         cubit: cubit,
         initialValue: initialValue,
+        clearable: clearable,
       ),
     );
   }
@@ -32,12 +35,14 @@ class _CoolRadioGroup<T> extends StatelessWidget {
   final Map<String, T> options;
   final CoolRadioGroupCubit cubit;
   final T initialValue;
+  final bool clearable;
 
   const _CoolRadioGroup({
     super.key,
     required this.options,
     required this.cubit,
     required this.initialValue,
+    this.clearable = false,
   });
 
   @override
@@ -59,6 +64,13 @@ class _CoolRadioGroup<T> extends StatelessWidget {
                 _buildRadioTile(value, groupValue, label),
               ),
         );
+        if(clearable) {
+          children.add(
+          IconButton(
+            onPressed: () =>cubit.setValue(null),
+            icon: Icon(Icons.clear),
+          ));
+        }
         children.add(disposer);
 
 
@@ -72,7 +84,7 @@ class _CoolRadioGroup<T> extends StatelessWidget {
       title: Text(label.trSync()),
       leading: Radio<T>(
         value: value,
-        groupValue: groupValue,
+        groupValue: groupValue?? "" as T,
 
         onChanged: cubit.setValue,
       ),

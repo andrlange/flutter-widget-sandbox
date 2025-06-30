@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 import '/src/widgets/core/selectors/cool_radio_group.dart';
 
@@ -14,9 +15,11 @@ Widget buildWidget(BuildContext context) {
   return Center(
     child: SizedBox(
       width: 250,
-      height: 200,
+      height: 250,
       child: CoolRadioGroup(
          options: _moc, initialValue: 'Option 1',
+        clearable: context.knobs.boolean(
+            label: 'Show Clearable', initialValue: false),
       ),
     ),
   );
