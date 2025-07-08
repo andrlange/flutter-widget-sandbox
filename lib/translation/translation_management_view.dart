@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:widgetbook_example/src/config/app_config.dart';
+import '../src/config/app_config.dart';
 import 'dialog/translation_dialog.dart';
 import 'state/translation_bloc.dart';
 import '../src/translation/service/translation_models.dart';
