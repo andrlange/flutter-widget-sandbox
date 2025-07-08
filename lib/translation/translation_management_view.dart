@@ -5,6 +5,7 @@ import 'package:widgetbook_example/src/config/app_config.dart';
 import 'dialog/translation_dialog.dart';
 import 'state/translation_bloc.dart';
 import '../src/translation/service/translation_models.dart';
+import '../src/responsive/responsive_extension.dart';
 
 class TranslationManagementView extends StatelessWidget {
   const TranslationManagementView({super.key});
@@ -437,39 +438,64 @@ class _TranslationManagementViewState
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
-                      Row(
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Chip(
-                            label: Text(translation.category),
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.secondaryContainer,
-                            labelStyle: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSecondaryContainer,
-                              fontSize: 12,
-                            ),
+                          Row(
+                            children: [
+                              Chip(
+                                label: Text(translation.category),
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.secondaryContainer,
+                                labelStyle: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSecondaryContainer,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Chip(
+                                label: Text(translation.locale.toUpperCase()),
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.tertiaryContainer,
+                                labelStyle: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onTertiaryContainer,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(width: 8).hideOn(context,
+                                  [DeviceType.tiny]),
+                              Chip(
+                                label: translation.isCustomizable
+                                    ? Text(
+                                        'CUSTOMIZABLE : ${translation.maxLength}',
+                                      )
+                                    : Text('FIXED'),
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.onTertiary,
+                                labelStyle: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onTertiaryContainer,
+                                  fontSize: 12,
+                                ),
+                              ).hideOn(context,
+                                  [DeviceType.tiny]),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Chip(
-                            label: Text(translation.locale.toUpperCase()),
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.tertiaryContainer,
-                            labelStyle: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onTertiaryContainer,
-                              fontSize: 12,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
+                          const SizedBox(height: 8).showOn(context, [DeviceType.tiny]),
                           Chip(
                             label: translation.isCustomizable
                                 ? Text(
-                                    'CUSTOMIZABLE : ${translation.maxLength}',
-                                  )
+                              'CUSTOMIZABLE : ${translation.maxLength}',
+                            )
                                 : Text('FIXED'),
                             backgroundColor: Theme.of(
                               context,
@@ -480,7 +506,7 @@ class _TranslationManagementViewState
                               ).colorScheme.onTertiaryContainer,
                               fontSize: 12,
                             ),
-                          ),
+                          ).showOn(context, [DeviceType.tiny]),
                         ],
                       ),
                     ],
