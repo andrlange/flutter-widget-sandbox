@@ -19,10 +19,10 @@ class TranslationService implements ITranslationService {
 
   final Map<String, TranslationCategory> _categories = {};
   final Map<String, CustomizableCategory> _customizable = {};
-  TranslationListResponse _backendTranslations = TranslationListResponse(
-    translations: [],
-    count: 0,
-  );
+  final Map<String, TranslationListResponse> _backendTranslations = {};
+  final Map<String, List<String>> _loadedCategories = {};
+
+  Completer<void>? _updateCacheCompleter;
 
   String _currentLocale = AppConfig.fallbackLocale;
   final List<String> _supportedLocales;
@@ -39,118 +39,187 @@ class TranslationService implements ITranslationService {
     _currentLocale = initialLocale ?? _fallbackLocale;
   }
 
+  Future<void> waitForCacheUpdated() async {
+    while (_updateCacheCompleter != null) {
+      await _updateCacheCompleter!.future;
+    }
+  }
+
   @override
   Future<void> initialize() async {
     // Load default category
-    await loadCategory(_defaultCategory);
+    // await loadCategory(_defaultCategory);
+  }
+
+  Future<void> startUpdateCache() async{
+    await waitForCacheUpdated();
+    _updateCacheCompleter = Completer<void>();
+  }
+
+  void stopUpdateCache() {
+    _updateCacheCompleter?.complete();
+    _updateCacheCompleter = null;
   }
 
   @override
   Future<void> setLocale(String locale) async {
-    if (!_supportedLocales.contains(locale)) {
-      throw ArgumentError('Unsupported locale: $locale');
-    }
 
     _currentLocale = locale;
 
     // Reload all loaded categories for new locale
-    final loadedCategories = _categories.keys
-        .where((cat) => _categories[cat]!.isLoaded)
-        .toList();
-
-    for (final category in loadedCategories) {
-      await _fileService.loadCategoryFromLocal(
-        categories: _categories,
-        customizable: _customizable,
-        category: category,
-        currentLocale: _currentLocale,
-        keySplitter: _keySplitter,
-      );
+    for(var cat in _customizable.keys) {
+      await loadCategory(cat, locale: locale);
     }
+
+    _loadedCategories.forEach((cat, locList) async{
+      for(var loc in locList) {
+        if(loc != locale) {
+          await clearCategory(cat, loc);
+          print('Reloading category: $cat, locale: $loc');
+          await loadCategory(cat, locale: loc);
+        }
+      }
+    });
+
   }
 
   @override
-  Future<void> loadCategory(String category) async {
-    if (_categories[category]?.isLoaded == true) {
-      return; // Already loaded
+  Future<void> clearCategory(String category, String locale) async{
+    await startUpdateCache();
+
+    if (_categories[category] != null) {
+      _categories[category]?.translations.remove(locale);
+    }
+    if(_backendTranslations[category]!= null) {
+      _backendTranslations[category]!.translations.removeWhere((t) => t
+          .locale == locale);
+    }
+    if(_loadedCategories[category]!= null) {
+      _loadedCategories[category]!.remove(locale);
+      // remove also customizable from category list
+      if(_loadedCategories[category]!.isEmpty){
+        if(_customizable[category]!= null) {
+          _customizable[category]!.clear;
+        }
+      }
     }
 
+   stopUpdateCache();
+  }
+
+  @override
+  Future<void> loadCategory(String category, {String? locale}) async {
+    await startUpdateCache();
+
+    final String takeLocale = locale ?? _currentLocale;
+
+    if (isCategoryLoaded(category, locale: takeLocale)) {
+      print('Category $category, locale $takeLocale already loaded');
+      return;
+    }
+
+    print('Loading Category $category, locale $takeLocale ...');
+    // Fetch translations from local if not loaded yet
     await _fileService.loadCategoryFromLocal(
       categories: _categories,
       customizable: _customizable,
       category: category,
-      currentLocale: _currentLocale,
+      currentLocale: takeLocale,
       keySplitter: _keySplitter,
     );
 
-    _categories[category]?.isLoaded = true;
-
     // Fetch translations from backend if not loaded yet and update cache
     TranslationListResponse backendResult = await _backendService
-        .getTranslationsByCategoryAndLocale(category, _currentLocale, false);
+        .getTranslationsByCategoryAndLocale(category, takeLocale, false);
 
-    if (!AppConfig.isProductionMode) {
-      await _processBackendResult(backendResult, category);
-    }
+    await _processBackendResult(backendResult, category, locale: takeLocale);
+
+    print('Adding LoadedCategories:Locale $category:$takeLocale');
+    _loadedCategories.putIfAbsent(category, () => []);
+   _loadedCategories[category]?.add(takeLocale);
+
+    print('Updated LoadedCategories:$_loadedCategories');
+    stopUpdateCache();
   }
 
   Future<void> _processBackendResult(
     TranslationListResponse response,
-    String category,
-  ) async {
-    _backendTranslations = response;
+    String category, {
+    String? locale,
+  }) async {
+    final String takeLocale = locale ?? _currentLocale;
+    print('Processing backend result for category: $category, locale: $takeLocale');
+
+    if (_backendTranslations[category] == null) {
+      _backendTranslations[category] = TranslationListResponse(
+        translations: [],
+        count: 0,
+      );
+    }
+    for (var trans in response.translations) {
+      _backendTranslations[category]?.translations.add(trans);
+    }
+
     // 1) check if all customizable translations exists in the backend response
     _customizable[category]?.customizer.forEach((key, maxLength) async {
       if (!response.hasKey(key)) {
         // a) create new translation for backend
         final String translation =
-            getTranslationFromCategory(category, _currentLocale, key) ??
-            'EMPTY';
+            getTranslationFromCategory(category, takeLocale, key) ?? 'EMPTY';
 
-        // b) write new translation to the backend
-        final TranslationResponse? response = await _backendService
-            .createTranslation(
-              category: category,
-              locale: _currentLocale,
-              key: key,
-              value: translation,
-              maxLength: maxLength,
-            );
+        if (!AppConfig.isProductionMode) {
+          // b) write new translation to the backend
+          final TranslationResponse? response = await _backendService
+              .createTranslation(
+            category: category,
+            locale: takeLocale,
+            key: key,
+            value: translation,
+            maxLength: maxLength,
+          );
 
-        if (response == null) {
-          print('Failed to create translation for $key');
+          if (response == null) {
+            print('Failed to create translation for $key');
+          }
         }
       } else {
         for (final trans in response.translations) {
-          if (_categories.keys.contains(trans.category)) {
-            if (_categories[trans.category]!.translations[trans.locale]?[trans
-                    .key] !=
-                null) {
-              _categories[trans.category]!.translations[trans.locale]?.update(
-                key,
-                (value) => trans.value,
-              );
+
+          if (_categories[trans.category]!=null && _categories[trans
+              .category]!.translations[trans.locale]!=null) {
+            if (_categories[trans.category]!.translations[trans.locale]!.keys
+                .contains(trans.key)) {
+
+              try {
+                _categories[trans.category]!.translations[trans.locale]?.update(
+                    key, (value) => trans.value);
+              } catch (e) {
+                print('Error updating translation: key not in map: $key');
+              }
             }
           }
         }
       }
     });
 
-    // 2) check if there are customizable on the backend not defined
-    final List<TranslationResponse> toDelete = [];
-    for (var trans in response.translations) {
-      if (!isValidDefinedTranslation(trans.category, trans.locale, trans.key)) {
-        toDelete.add(trans);
+    if (!AppConfig.isProductionMode) {
+      // 2) check if there are customizable on the backend not defined
+      final List<TranslationResponse> toDelete = [];
+      for (var trans in response.translations) {
+        if (!isValidDefinedTranslation(
+            trans.category, trans.locale, trans.key)) {
+          toDelete.add(trans);
+        }
       }
-    }
 
-    for (var trans in toDelete) {
-      await _backendService.deleteTranslation(
-        category: trans.category,
-        locale: trans.locale,
-        key: trans.key,
-      );
-      print('Deleted translation: $trans');
+      for (var trans in toDelete) {
+        await _backendService.deleteTranslation(
+          category: trans.category,
+          locale: trans.locale,
+          key: trans.key,
+        );
+        print('Deleted translation: $trans');
+      }
     }
   }
 
@@ -192,10 +261,13 @@ class TranslationService implements ITranslationService {
     Map<String, dynamic>? parameters,
     List<dynamic>? args,
   }) {
-    final translationCategory = category ?? _defaultCategory;
 
+    final translationCategory = category ?? _defaultCategory;
+    //print('Translating $key, category: $translationCategory, locale:
+    //$_currentLocale');
     if (_categories[translationCategory] != null &&
-        _categories[translationCategory]!.isLoaded) {
+        _categories[translationCategory]!.translations[_currentLocale] !=
+            null) {
       String transLocale = _currentLocale;
 
       String? translation = _categories[translationCategory]?.getTranslation(
@@ -223,6 +295,7 @@ class TranslationService implements ITranslationService {
             translation;
         if (valueFromBackend != translation) {
           translation = valueFromBackend;
+
           _categories[translationCategory]?.translations[transLocale]?[key] =
               translation;
         }
@@ -269,8 +342,9 @@ class TranslationService implements ITranslationService {
   List<String> get supportedLocales => List.unmodifiable(_supportedLocales);
 
   @override
-  bool isCategoryLoaded(String category) {
-    return _categories[category]?.isLoaded == true;
+  bool isCategoryLoaded(String category, {String? locale}) {
+    final takeLocale = locale ?? _currentLocale;
+    return _categories[category]?.translations[takeLocale] != null;
   }
 
   // Protected method for subclasses to access translations
@@ -347,8 +421,10 @@ class TranslationService implements ITranslationService {
   }
 
   @override
-  Future<bool> updateTranslation(UpdateTranslationRequest request, String
-  initialValue) async {
+  Future<bool> updateTranslation(
+    UpdateTranslationRequest request,
+    String initialValue,
+  ) async {
     try {
       // check allowed
       if (!_customizable[request.category]!.customizer.keys.contains(
@@ -357,8 +433,8 @@ class TranslationService implements ITranslationService {
         return false;
       }
 
-      String? actualValue = _categories[request.category]
-          ?.translations[request.locale]?[request.key];
+      //String? actualValue = _categories[request.category]
+      //    ?.translations[request.locale]?[request.key];
 
       // update backend
       final result = await _backendService.updateTranslation(
@@ -375,13 +451,13 @@ class TranslationService implements ITranslationService {
                 .key] =
             result.value;
 
-        _backendTranslations.translations.removeWhere(
+        _backendTranslations[request.category]?.translations.removeWhere(
           (element) =>
               element.category == result.category &&
               element.key == result.key &&
               element.locale == result.locale,
         );
-        _backendTranslations.translations.add(result);
+        _backendTranslations[request.category]?.translations.add(result);
         return true;
       }
     } catch (e) {
@@ -400,7 +476,11 @@ class TranslationService implements ITranslationService {
     String locale,
     String key,
   ) {
-    for (var trans in _backendTranslations.translations) {
+    if (_backendTranslations[category] == null) {
+      return null;
+    }
+
+    for (var trans in _backendTranslations[category]!.translations) {
       if (trans.category == category &&
           trans.locale == locale &&
           trans.key == key) {
@@ -421,9 +501,9 @@ class TranslationService implements ITranslationService {
     print('TranslationService: Categories Dump:\n$_categories\n');
     print('TranslationService: Customizable Dump:\n$_customizable\n');
     print(
-      'TranslationService: BackendTranslation Dump:\n$_backendTranslations'
-      '\n',
+      'TranslationService: BackendTranslation Dump:\n$_backendTranslations\n',
     );
+    print('TranslationService: LoadedCategories Dump:\n$_loadedCategories\n');
   }
 
   @override

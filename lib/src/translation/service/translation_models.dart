@@ -130,7 +130,7 @@ class TranslationResponse extends Equatable {
       maxLength: maxLength ?? this.maxLength,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      isCustomizable: isCustomizable?? this.isCustomizable,
+      isCustomizable: isCustomizable ?? this.isCustomizable,
     );
   }
 
@@ -173,6 +173,20 @@ class TranslationListResponse extends Equatable {
       }
     }
     return false;
+  }
+
+  @override
+  String toString() {
+    final StringBuffer sb = StringBuffer();
+    sb.write('TranslationListResponse: [');
+    for (var translation in translations) {
+      sb.write(
+        '[${translation.category}:${translation.locale}]=>${translation.key}: '
+            '${translation.value}, ',
+      );
+    }
+    sb.write('] count: $count');
+    return sb.toString();
   }
 }
 

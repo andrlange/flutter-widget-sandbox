@@ -45,12 +45,11 @@ class TranslationItem {
 class TranslationCategory {
   final String name;
   final Map<String, Map<String, String>> translations; // locale -> key -> value
-  bool isLoaded;
+
 
   TranslationCategory({
     required this.name,
     Map<String, Map<String, String>>? translations,
-    this.isLoaded = false,
   }) : translations = translations ?? {};
 
   void addTranslation(String locale, String key, String value) {
@@ -72,7 +71,7 @@ class TranslationCategory {
 
   @override
   String toString() {
-    return 'TranslationCategory{name: $name, translations: $translations, isLoaded: $isLoaded}';
+    return 'TranslationCategory{name: $name, translations: $translations}';
   }
 }
 
@@ -94,8 +93,10 @@ class CustomizableCategory {
     return customizer[key];
   }
 
+  void get clear => customizer.clear();
+
   @override
   String toString() {
-    return 'CustomizableCategory{name: $name, customizer: ';
+    return 'CustomizableCategory{name: $name, customizer: $customizer';
   }
 }

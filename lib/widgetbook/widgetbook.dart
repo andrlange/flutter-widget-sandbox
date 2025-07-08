@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
+import '../src/config/app_config.dart';
 import '../src/translation/translated_text.dart';
 import '../widgetbook/devices/cool_devices.dart';
 import 'widgetbook.directories.g.dart';
 
 class TranslationAddon extends WidgetbookAddon<String> {
-  TranslationAddon({required List<String> locales, String? initialLocale})
+  TranslationAddon()
     : super(name: 'Language');
 
   @override
@@ -14,32 +15,23 @@ class TranslationAddon extends WidgetbookAddon<String> {
     return child;
   }
 
-  Future<void> _switchLanguage(String locale) async {
-    await TranslationHelper.switchLanguage(locale);
-  }
 
-  String _getLanguageName(String locale) {
-    switch (locale) {
-      case 'de':
-        return 'Deutsch';
-      case 'en':
-        return 'English';
-      default:
-        return locale.toUpperCase();
-    }
+  Future<void> _switchLanguage(String locale) async {
+   await TranslationHelper.switchLanguage(locale);
   }
 
   @override
   List<Field> get fields {
     return [
-      ListField(name: 'Languages', values: ['de', 'en'], initialValue: 'de'),
+      ListField(name: 'Languages', values: AppConfig.supportedLocales,
+          initialValue: AppConfig.fallbackLocale,),
     ];
   }
 
   @override
   String valueFromQueryGroup(Map<String, String> group) {
-    _switchLanguage(group['Languages'] ??  'de');
-    return group['Languages'] ??  'de';
+    _switchLanguage(group['Languages'] ??  AppConfig.fallbackLocale,);
+    return group['Languages'] ??  AppConfig.fallbackLocale;
   }
 }
 
@@ -69,7 +61,7 @@ class WidgetBookSandbox extends StatelessWidget {
                 CoolDevices.layout.mediumDesktop,
               ],
             ),
-            TranslationAddon(locales: ['de', 'en']),
+            TranslationAddon(),
           ],
         );
       },

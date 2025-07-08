@@ -18,7 +18,7 @@ abstract class ITranslationService {
     List<dynamic>? args,
   });
 
-  Future<void> loadCategory(String category);
+  Future<void> loadCategory(String category, {String? locale});
 
   Future<void> setLocale(String locale);
 
@@ -59,6 +59,8 @@ abstract class ITranslationService {
   );
 
   String getInitialValue(String category, String locale, String key);
+
+  Future<void> clearCategory(String category, String locale);
 
   void debugDumpCache();
 }

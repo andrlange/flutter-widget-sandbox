@@ -30,6 +30,7 @@ class TranslationAddon extends WidgetbookAddon<String> {
   }
 
   Future<void> _switchLanguage(String locale) async {
+    print('try to switch language to $locale');
     await TranslationHelper.switchLanguage(locale);
   }
 

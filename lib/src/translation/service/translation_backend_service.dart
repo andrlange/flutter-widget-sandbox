@@ -73,7 +73,7 @@ class TranslationBackendService {
     );
 
     // Logging Interceptor für Development
-    if(!AppConfig.isProductionMode) {
+    if(AppConfig.enableDebugMode) {
       _dio.interceptors.add(
         LogInterceptor(
           requestBody: true,
@@ -223,9 +223,7 @@ class TranslationBackendService {
     try {
       final response = await _apiClient.updateTranslation(request);
       return response;
-    } catch (e) {
-      print('TranslationBackendService: Error updating translation');
-    }
+    } catch (e) {}
 
     return null;
   }

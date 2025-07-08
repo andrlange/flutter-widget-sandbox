@@ -21,12 +21,12 @@ class Locator {
     // Initialize the translation service
     ITranslationService service = locator<ITranslationService>();
     await service.initialize();
-    debugPrint('Translation service initialized...');
-    await service.setLocale('de');
-    await service.loadCategory('common');
-    await service.setLocale('en');
-    await service.loadCategory('common');
+    debugPrint('Translation service initializing...');
+    await service.loadCategory('common', locale: 'de');
+    await service.loadCategory('common', locale: 'en');
     await service.setLocale('de');
 
+
+    //await service.clearCategory('common', 'en');
   }
 }

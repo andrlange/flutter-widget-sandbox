@@ -1,5 +1,6 @@
 class AppConfig {
   static const bool isProductionMode = false;
+  static const bool enableDebugMode = false;
   static bool addTranslationEnabled = false;
 
   static const String baseUrlBackend = 'http://localhost:8080/api';
