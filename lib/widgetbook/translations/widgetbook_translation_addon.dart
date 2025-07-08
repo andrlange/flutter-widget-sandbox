@@ -1,8 +1,8 @@
 import 'package:widgetbook/widgetbook.dart';
 import 'package:flutter/material.dart';
-import '/src/internationalization/translation_extension.dart';
-import '/src/internationalization/translation_widget.dart';
-import '/src/internationalization/translation_service.dart';
+import '/src/translation/translation_extension.dart';
+import '/src/translation/translated_text.dart';
+import '/src/translation/translation_service.dart';
 
 class TranslationAddon extends WidgetbookAddon<String> {
   TranslationAddon({
@@ -107,7 +107,7 @@ class WidgetbookTranslationManager {
 // Sync extension for Widgetbook
 extension SyncTranslation on String {
   String trSync({String? category, Map<String, dynamic>? parameters, List<dynamic>? args}) {
-    final service = getIt<ITranslationService>();
+    final service = locator<ITranslationService>();
     if (service is EnhancedTranslationService) {
       return service.translateSync(this, category: category, parameters: parameters, args: args);
     }

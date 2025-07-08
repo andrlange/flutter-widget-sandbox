@@ -1,4 +1,7 @@
 {
+  "app.name": "My Application",
+
+
   "action.button.print": "Print",
   "action.button.save": "Save",
   "action.button.add": "Add",

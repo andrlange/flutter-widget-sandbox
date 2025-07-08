@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:widgetbook_example/src/translation/translated_text.dart';
 import '/src/responsive/responsive_extension.dart';
-import '/src/internationalization/translation_extension.dart';
+import '/src/translation/translation_extension.dart';
 
 
 /// A custom widget that represents a button with an icon and/or text,
@@ -73,9 +74,8 @@ class CoolActionButton extends StatelessWidget {
             ? (buttonText == 'ERROR!')
                   ? Text(buttonText)
                   : !context.isTiny
-                  ? Text(
-                      'action.button'
-                      '.$buttonText'.trSync(),
+                  ? TranslatedText(
+                      'action.button.$buttonText',
                     )
                   : SizedBox.shrink()
             : SizedBox.shrink(),

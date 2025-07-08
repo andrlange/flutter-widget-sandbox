@@ -3,12 +3,18 @@ class TranslationItem {
   final String value;
   final String category;
   final String locale;
+  final String defaultValue;
+  final bool isCustomizable;
+  final int maxLength;
 
   const TranslationItem({
     required this.key,
     required this.value,
     required this.category,
     required this.locale,
+    this.defaultValue = "",
+    this.isCustomizable = false,
+    this.maxLength = 0,
   });
 
   factory TranslationItem.fromJson(Map<String, dynamic> json) {
@@ -17,6 +23,9 @@ class TranslationItem {
       value: json['value'] as String,
       category: json['category'] as String,
       locale: json['locale'] as String,
+      defaultValue: json['defaultValue'] as String,
+      isCustomizable: json['isCustomizable'] as bool,
+      maxLength: json['maxLength'] as int,
     );
   }
 
@@ -26,6 +35,9 @@ class TranslationItem {
       'value': value,
       'category': category,
       'locale': locale,
+      'defaultValue': defaultValue,
+      'isCustomizable': isCustomizable,
+      'maxLength': maxLength,
     };
   }
 }
@@ -48,5 +60,42 @@ class TranslationCategory {
 
   String? getTranslation(String locale, String key) {
     return translations[locale]?[key];
+  }
+
+  int get countElements {
+    int count = 0;
+    for (var value in translations.values) {
+      count += value.length;
+    }
+    return count;
+  }
+
+  @override
+  String toString() {
+    return 'TranslationCategory{name: $name, translations: $translations, isLoaded: $isLoaded}';
+  }
+}
+
+class CustomizableCategory {
+  final String name;
+  final Map<String, int> customizer; //  key -> value
+
+
+  CustomizableCategory({
+    required this.name,
+    Map<String, int>? customizer,
+  }) : customizer = customizer ?? {};
+
+  void addCustomization(String key, int value) {
+    customizer.putIfAbsent(key, () => value);
+  }
+
+  int? getCustomization(String category, String key) {
+    return customizer[key];
+  }
+
+  @override
+  String toString() {
+    return 'CustomizableCategory{name: $name, customizer: ';
   }
 }

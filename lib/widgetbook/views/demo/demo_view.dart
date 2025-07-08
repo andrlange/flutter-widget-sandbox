@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
-
+import '../../../src/translation/translation_extension.dart';
 import '../../../src/widgets/core/buttons/cool_action_button.dart';
 import '../../../src/widgets/core/images/cool_image.dart';
 import '../../../src/widgets/core/selectors/cool_radio_group.dart';
@@ -65,7 +65,12 @@ class DemoView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: context.isDarkMode ?  Colors.black : Colors.blue,
-        title: Text('Demo App', style: TextStyle(
+        title: Text('${'app.name'.trSync(parameters: {'param1':'Demo'})} '
+            '${'app'
+            '.version'
+            .trSync()}',
+          style:
+        TextStyle(
           color: context.isDarkMode ?  Colors.white30 : Colors.white
         ),),
       ),

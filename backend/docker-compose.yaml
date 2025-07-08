@@ -1,0 +1,28 @@
+services:
+  postgresql:
+    image: postgres:17-alpine
+    container_name: postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: translation_design_db
+      PGDATA: /var/lib/postgres/data
+    volumes:
+      - './vols/postgresqll:/var/lib/postgres/data'
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:9.4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@example.de
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - './vols/pgadmin_data:/etc/pgadmin/'
+      - './vols/pgadmin_config:/var/lib/pgadmin/'
+    ports:
+      - "5555:80"
+    depends_on:
+      - postgresql
+

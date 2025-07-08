@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/src/internationalization/translation_extension.dart';
+import '/src/translation/translation_extension.dart';
 import '/src/statemanagement/disposer.dart';
 import '/src/widgets/core/selectors/states/cool_radio_group_cubit.dart';
 

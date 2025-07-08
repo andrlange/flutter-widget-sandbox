@@ -1,5 +1,5 @@
-import '../../widgetbook/services/service_locator.dart';
-export '../../widgetbook/services/service_locator.dart';
+import '../../widgetbook/services/locator.dart';
+export '../../widgetbook/services/locator.dart';
 import 'translation_service.dart';
 
 extension TranslationExtensions on String {
@@ -8,7 +8,7 @@ extension TranslationExtensions on String {
     Map<String, dynamic>? parameters,
     List<dynamic>? args,
   }) async {
-    return await getIt<ITranslationService>().translate(
+    return await locator<ITranslationService>().translate(
       this,
       category: category,
       parameters: parameters,
@@ -17,6 +17,7 @@ extension TranslationExtensions on String {
   }
 }
 
+
 // For synchronous access (use carefully, only for pre-loaded translations)
 extension SyncTranslationExtensions on String {
   String trSync({
@@ -24,14 +25,12 @@ extension SyncTranslationExtensions on String {
     Map<String, dynamic>? parameters,
     List<dynamic>? args,
   }) {
-    final service = getIt<ITranslationService>();
+    final service = locator<ITranslationService>();
     final translationCategory = category ?? 'common';
 
-
-    // This is a simplified sync version - only works for already loaded translations
     if (service.isCategoryLoaded(translationCategory)) {
-      // You'd need to add a sync method to your service for this to work
-      return service.translateSync(this); // Fallback to key for now
+      return service.translateSync(this,category: translationCategory,
+          parameters: parameters, args: args);
     }
 
     return this; // Return key as fallback

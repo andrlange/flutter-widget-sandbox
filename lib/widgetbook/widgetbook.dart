@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
-import '../src/internationalization/translation_widget.dart';
+import '../src/translation/translated_text.dart';
 import '../widgetbook/devices/cool_devices.dart';
 import 'widgetbook.directories.g.dart';
 

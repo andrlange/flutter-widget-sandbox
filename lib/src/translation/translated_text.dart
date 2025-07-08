@@ -13,19 +13,37 @@ class TranslatedText extends StatelessWidget {
   final TextOverflow? overflow;
 
   const TranslatedText(
-      this.translationKey, {
-        super.key,
-        this.category,
-        this.parameters,
-        this.args,
-        this.style,
-        this.textAlign,
-        this.maxLines,
-        this.overflow,
-      });
+    this.translationKey, {
+    super.key,
+    this.category,
+    this.parameters,
+    this.args,
+    this.style,
+    this.textAlign,
+    this.maxLines,
+    this.overflow,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final String syncCategory = category ?? 'common';
+
+    final String syncTranslation = translationKey.trSync(
+      category: syncCategory,
+      parameters: parameters,
+      args: args,
+    );
+
+    if (syncTranslation != translationKey) {
+      return Text(
+        syncTranslation,
+        style: style,
+        textAlign: textAlign,
+        maxLines: maxLines,
+        overflow: overflow,
+      );
+    }
+
     return FutureBuilder<String>(
       future: translationKey.tr(
         category: category,
@@ -33,17 +51,19 @@ class TranslatedText extends StatelessWidget {
         args: args,
       ),
       builder: (context, snapshot) {
-        if(!snapshot.hasData) return const SizedBox.shrink();
+        //(!snapshot.hasData) return SizedBox.shrink();
 
-        final text = snapshot.data ?? translationKey;
+        final String? text = (!snapshot.hasData)
+            ? null
+            : snapshot.data ?? translationKey;
 
-        return Text(
+        return text!=null ? Text(
           text,
           style: style,
           textAlign: textAlign,
           maxLines: maxLines,
           overflow: overflow,
-        );
+        ) : SizedBox.shrink();
       },
     );
   }
@@ -52,19 +72,19 @@ class TranslatedText extends StatelessWidget {
 // For Widgetbook usage
 class TranslationHelper {
   static Future<void> preloadCategories(List<String> categories) async {
-    final service = getIt<ITranslationService>();
+    final service = locator<ITranslationService>();
     await Future.wait(
       categories.map((category) => service.loadCategory(category)),
     );
   }
 
   static Future<void> switchLanguage(String locale) async {
-    final service = getIt<ITranslationService>();
+    final service = locator<ITranslationService>();
     await service.setLocale(locale);
   }
 
   static bool isCategoryLoaded(String category) {
-    final service = getIt<ITranslationService>();
+    final service = locator<ITranslationService>();
     return service.isCategoryLoaded(category);
   }
 }
