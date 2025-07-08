@@ -347,7 +347,8 @@ class TranslationService implements ITranslationService {
   }
 
   @override
-  Future<bool> updateTranslation(UpdateTranslationRequest request) async {
+  Future<bool> updateTranslation(UpdateTranslationRequest request, String
+  initialValue) async {
     try {
       // check allowed
       if (!_customizable[request.category]!.customizer.keys.contains(
@@ -365,6 +366,7 @@ class TranslationService implements ITranslationService {
         locale: request.locale,
         key: request.key,
         value: request.value,
+        initialValue: initialValue,
       );
 
       if (result != null) {
@@ -422,5 +424,10 @@ class TranslationService implements ITranslationService {
       'TranslationService: BackendTranslation Dump:\n$_backendTranslations'
       '\n',
     );
+  }
+
+  @override
+  String getInitialValue(String category, String locale, String key) {
+    return _categories[category]?.translations[locale]?[key] ?? 'EMPTY';
   }
 }

@@ -1,7 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
-import 'package:widgetbook_example/src/config/app_config.dart';
-import '../../translation/service/translation_backend_service.dart';
+import '../../src/config/app_config.dart';
 import '../../src/translation/translation_service.dart';
 
 final GetIt locator = GetIt.instance;
@@ -29,8 +28,5 @@ class Locator {
     await service.loadCategory('common');
     await service.setLocale('de');
 
-
-    locator.registerSingleton<TranslationBackendService>
-    (TranslationBackendService());
   }
 }

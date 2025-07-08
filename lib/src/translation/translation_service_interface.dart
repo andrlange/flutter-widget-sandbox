@@ -47,10 +47,18 @@ abstract class ITranslationService {
 
   Map<String, TranslationCategory> get allCategories;
 
-  Future<bool> updateTranslation(UpdateTranslationRequest request);
+  Future<bool> updateTranslation(
+    UpdateTranslationRequest request,
+    String initialValue,
+  );
 
-  TranslationResponse? fetchFromBackendResponse(String category, String
-  locale,String key);
+  TranslationResponse? fetchFromBackendResponse(
+    String category,
+    String locale,
+    String key,
+  );
+
+  String getInitialValue(String category, String locale, String key);
 
   void debugDumpCache();
 }

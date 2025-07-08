@@ -73,13 +73,15 @@ class TranslationBackendService {
     );
 
     // Logging Interceptor für Development
-    _dio.interceptors.add(
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        logPrint: (object) => print(object),
-      ),
-    );
+    if(!AppConfig.isProductionMode) {
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          logPrint: (object) => print(object),
+        ),
+      );
+    }
 
     // Error Handling Interceptor
     _dio.interceptors.add(
@@ -180,6 +182,7 @@ class TranslationBackendService {
     required String locale,
     required String key,
     required String value,
+    required String initialValue,
   }) async {
     final request = UpdateTranslationRequest(
       category: category,
@@ -200,13 +203,16 @@ class TranslationBackendService {
           key,
           false,
         );
-        final newTranslation = await createTranslation(
+        await createTranslation(
           category: category,
           locale: locale,
           key: key,
-          value: value,
+          value: initialValue,
           maxLength: fallBack.maxLength,
         );
+
+        final newTranslation =await _apiClient.updateTranslation(request);
+
         return newTranslation;
       } catch (e) {
         print('TranslationBackendService: Error creating translation');

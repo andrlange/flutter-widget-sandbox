@@ -127,7 +127,9 @@ class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
   ) async {
     print('Update Translation Event: ${event.request}');
     try {
-      if (await _service.updateTranslation(event.request)) {
+      final String initialValue = _service.getInitialValue(event.request
+          .category, event.request.locale, event.request.key);
+      if (await _service.updateTranslation(event.request, initialValue)) {
         emit(
           TranslationOperationSuccess(
             'Übersetzung erfolgreich aktualisiert',
