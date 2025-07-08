@@ -9,7 +9,7 @@ class LayoutDevices {
     platform: TargetPlatform.android,
     name: 'Small Phone',
     id: 'small',
-    screenSize: const Size(382, 712),
+    screenSize: const Size(385, 712),
     safeAreas: const EdgeInsets.only(
       left: 0.0,
       top: 24.0,
