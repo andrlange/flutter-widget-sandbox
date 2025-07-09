@@ -8,8 +8,8 @@ sealed class CoolSwitchState extends Equatable {
 }
 
 final class SwitchToggleState extends CoolSwitchState {
-   final bool value;
    const SwitchToggleState({required this.value});
+   final bool value;
 
    @override
    List<Object> get props => [value];

@@ -13,62 +13,62 @@ class InitializeTranslations extends TranslationEvent {
 }
 
 class LoadTranslations extends TranslationEvent {
-  final String? category;
-  final String? locale;
 
   const LoadTranslations({this.category, this.locale});
+  final String? category;
+  final String? locale;
 
   @override
   List<Object?> get props => [category, locale];
 }
 
 class CreateTranslationEvent extends TranslationEvent {
-  final CreateTranslationRequest request;
 
   const CreateTranslationEvent(this.request);
+  final CreateTranslationRequest request;
 
   @override
   List<Object?> get props => [request];
 }
 
 class UpdateTranslationEvent extends TranslationEvent {
-  final UpdateTranslationRequest request;
 
   const UpdateTranslationEvent(this.request);
+  final UpdateTranslationRequest request;
 
   @override
   List<Object?> get props => [request];
 }
 
 class DeleteTranslationEvent extends TranslationEvent {
-  final String category;
-  final String locale;
-  final String key;
 
   const DeleteTranslationEvent({
     required this.category,
     required this.locale,
     required this.key,
   });
+  final String category;
+  final String locale;
+  final String key;
 
   @override
   List<Object?> get props => [category, locale, key];
 }
 
 class FilterTranslations extends TranslationEvent {
-  final String? category;
-  final String? locale;
 
   const FilterTranslations({this.category, this.locale});
+  final String? category;
+  final String? locale;
 
   @override
   List<Object?> get props => [category, locale];
 }
 
 class SearchTranslations extends TranslationEvent {
-  final String searchTerm;
 
   const SearchTranslations(this.searchTerm);
+  final String searchTerm;
 
   @override
   List<Object?> get props => [searchTerm];
@@ -79,13 +79,6 @@ class ResetSearch extends TranslationEvent {
 }
 
 class CreateNewTranslationKey extends TranslationEvent {
-  final String category;
-  final String key;
-  final Map<String, String> localeValues;
-  final bool isCustomizable;
-  final int maxLength;
-  final bool isNewCategory;
-  final Set<String> targetLocales;
 
   const CreateNewTranslationKey({
     required this.category,
@@ -96,6 +89,13 @@ class CreateNewTranslationKey extends TranslationEvent {
     required this.isNewCategory,
     required this.targetLocales,
   });
+  final String category;
+  final String key;
+  final Map<String, String> localeValues;
+  final bool isCustomizable;
+  final int maxLength;
+  final bool isNewCategory;
+  final Set<String> targetLocales;
 
   @override
   List<Object?> get props => [

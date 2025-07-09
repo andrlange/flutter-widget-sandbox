@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/src/translation/translation_extension.dart';
+
 import '/src/statemanagement/disposer.dart';
+import '/src/translation/translation_extension.dart';
 import '/src/widgets/core/selectors/states/cool_radio_group_cubit.dart';
 
 class CoolRadioGroup<T> extends StatelessWidget {
-  final Map<String, T> options;
-  final T initialValue;
-  final bool clearable;
 
   const CoolRadioGroup({
     super.key,
@@ -15,10 +13,13 @@ class CoolRadioGroup<T> extends StatelessWidget {
     required this.initialValue,
     this.clearable = false,
   });
+  final Map<String, T> options;
+  final T initialValue;
+  final bool clearable;
 
   @override
   Widget build(BuildContext context) {
-    final CoolRadioGroupCubit cubit = CoolRadioGroupCubit(initialValue);
+    final cubit = CoolRadioGroupCubit<T>(initialValue);
     return BlocProvider.value(
       value: cubit,
       child: _CoolRadioGroup(
@@ -32,10 +33,6 @@ class CoolRadioGroup<T> extends StatelessWidget {
 }
 
 class _CoolRadioGroup<T> extends StatelessWidget {
-  final Map<String, T> options;
-  final CoolRadioGroupCubit cubit;
-  final T initialValue;
-  final bool clearable;
 
   const _CoolRadioGroup({
     super.key,
@@ -44,17 +41,21 @@ class _CoolRadioGroup<T> extends StatelessWidget {
     required this.initialValue,
     this.clearable = false,
   });
+  final Map<String, T> options;
+  final CoolRadioGroupCubit<T> cubit;
+  final T initialValue;
+  final bool clearable;
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = [];
-    final Disposer disposer = Disposer(dispose: cubit.dispose);
+    final children = <Widget>[];
+    final disposer = Disposer(dispose: cubit.dispose);
 
-    return BlocBuilder<CoolRadioGroupCubit, CoolRadioGroupState>(
+    return BlocBuilder<CoolRadioGroupCubit<T>, CoolRadioGroupState>(
       builder: (context, state) {
         T? groupValue;
         if(state is CoolRadioGroupValue){
-          groupValue = state.newValue;
+          groupValue = state.newValue as T;
         }
 
         children.clear();
@@ -68,7 +69,7 @@ class _CoolRadioGroup<T> extends StatelessWidget {
           children.add(
           IconButton(
             onPressed: () =>cubit.setValue(null),
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
           ));
         }
         children.add(disposer);
@@ -84,7 +85,7 @@ class _CoolRadioGroup<T> extends StatelessWidget {
       title: Text(label.trSync()),
       leading: Radio<T>(
         value: value,
-        groupValue: groupValue?? "" as T,
+        groupValue: groupValue?? '' as T,
 
         onChanged: cubit.setValue,
       ),

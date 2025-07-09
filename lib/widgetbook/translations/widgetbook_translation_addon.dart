@@ -1,7 +1,8 @@
-import 'package:widgetbook/widgetbook.dart';
 import 'package:flutter/material.dart';
-import '/src/translation/translation_extension.dart';
+import 'package:widgetbook/widgetbook.dart';
+
 import '/src/translation/translated_text.dart';
+import '/src/translation/translation_extension.dart';
 import '/src/translation/translation_service.dart';
 
 class TranslationAddon extends WidgetbookAddon<String> {
@@ -22,7 +23,7 @@ class TranslationAddon extends WidgetbookAddon<String> {
       future: _switchLanguage(setting),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return child;
       },

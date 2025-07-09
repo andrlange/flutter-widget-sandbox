@@ -53,7 +53,7 @@ class TranslatedText extends StatelessWidget {
       builder: (context, snapshot) {
         //(!snapshot.hasData) return SizedBox.shrink();
 
-        final String? text = (!snapshot.hasData)
+        final text = (!snapshot.hasData)
             ? null
             : snapshot.data ?? translationKey;
 
@@ -63,7 +63,7 @@ class TranslatedText extends StatelessWidget {
           textAlign: textAlign,
           maxLines: maxLines,
           overflow: overflow,
-        ) : SizedBox.shrink();
+        ) : const SizedBox.shrink();
       },
     );
   }

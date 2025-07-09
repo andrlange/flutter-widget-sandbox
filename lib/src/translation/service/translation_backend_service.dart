@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'translation_models.dart';
 import '../../config/app_config.dart';
+import 'translation_models.dart';
 
 part 'translation_backend_service.g.dart';
 
@@ -21,45 +21,45 @@ abstract class TranslationApiClient {
     @Body() UpdateTranslationRequest request,
   );
 
-  @DELETE("")
+  @DELETE('')
   Future<void> deleteTranslation(
-    @Query("category") String category,
-    @Query("locale") String locale,
+    @Query('category') String category,
+    @Query('locale') String locale,
     @Query("key") String key,
   );
 
-  @GET("/single")
+  @GET('/single')
   Future<TranslationResponse> getTranslation(
-    @Query("category") String category,
-    @Query("locale") String locale,
-    @Query("key") String key,
-    @Query("initialValue") bool initialValue,
+    @Query('category') String category,
+    @Query('locale') String locale,
+    @Query('key') String key,
+    @Query('initialValue') bool initialValue,
   );
 
-  @GET("/category")
+  @GET('/category')
   Future<TranslationListResponse> getTranslationsByCategoryAndLocale(
-    @Query("category") String category,
-    @Query("locale") String locale,
-    @Query("initialValue") bool initialValue,
+    @Query('category') String category,
+    @Query('locale') String locale,
+    @Query('initialValue') bool initialValue,
   );
 
-  @GET("/locale")
+  @GET('/locale')
   Future<TranslationListResponse> getTranslationsByLocale(
-    @Query("locale") String locale,
-    @Query("initialValue") bool initialValue,
+    @Query('locale') String locale,
+    @Query('initialValue') bool initialValue,
   );
 }
 
 class TranslationBackendService {
-  late final TranslationApiClient _apiClient;
-  late final Dio _dio;
-  final _fallbackLocale;
 
   TranslationBackendService(this._fallbackLocale) {
     _dio = Dio();
     _setupDio();
     _apiClient = TranslationApiClient(_dio);
   }
+  late final TranslationApiClient _apiClient;
+  late final Dio _dio;
+  final String _fallbackLocale;
 
   void _setupDio() {
     _dio.options = BaseOptions(
@@ -100,18 +100,21 @@ class TranslationBackendService {
   }
 
   TranslationException _handleDioError(DioException error) {
+    final errorMessage =  (error.response != null) ? error.response?.data['message'] as String: null;
+
     switch (error.response?.statusCode) {
       case 409:
         return TranslationAlreadyExistsException(
-          error.response?.data['message'] ?? 'Translation bereits vorhanden',
+          errorMessage ?? 'Translation bereits '
+          'vorhanden',
         );
       case 404:
         return TranslationNotFoundException(
-          error.response?.data['message'] ?? 'Translation nicht gefunden',
+          errorMessage ?? 'Translation nicht gefunden',
         );
       case 400:
         return TranslationException(
-          error.response?.data['message'] ?? 'Ungültige Anfrage',
+          errorMessage ?? 'Ungültige Anfrage',
           400,
         );
       case 500:

@@ -6,11 +6,6 @@ part 'translation_models.g.dart';
 
 @JsonSerializable()
 class CreateTranslationRequest extends Equatable {
-  final String category;
-  final String locale;
-  final String key;
-  final String value;
-  final int maxLength;
 
   const CreateTranslationRequest({
     required this.category,
@@ -22,6 +17,11 @@ class CreateTranslationRequest extends Equatable {
 
   factory CreateTranslationRequest.fromJson(Map<String, dynamic> json) =>
       _$CreateTranslationRequestFromJson(json);
+  final String category;
+  final String locale;
+  final String key;
+  final String value;
+  final int maxLength;
 
   Map<String, dynamic> toJson() => _$CreateTranslationRequestToJson(this);
 
@@ -31,10 +31,6 @@ class CreateTranslationRequest extends Equatable {
 
 @JsonSerializable()
 class UpdateTranslationRequest extends Equatable {
-  final String category;
-  final String locale;
-  final String key;
-  final String value;
 
   const UpdateTranslationRequest({
     required this.category,
@@ -45,6 +41,10 @@ class UpdateTranslationRequest extends Equatable {
 
   factory UpdateTranslationRequest.fromJson(Map<String, dynamic> json) =>
       _$UpdateTranslationRequestFromJson(json);
+  final String category;
+  final String locale;
+  final String key;
+  final String value;
 
   Map<String, dynamic> toJson() => _$UpdateTranslationRequestToJson(this);
 
@@ -54,16 +54,6 @@ class UpdateTranslationRequest extends Equatable {
 
 @JsonSerializable()
 class TranslationResponse extends Equatable {
-  final int id;
-  final String category;
-  final String locale;
-  final String key;
-  final String value;
-  final String initialValue;
-  final int maxLength;
-  final String createdAt;
-  final String updatedAt;
-  final bool isCustomizable;
 
   const TranslationResponse({
     required this.id,
@@ -80,8 +70,6 @@ class TranslationResponse extends Equatable {
 
   factory TranslationResponse.fromJson(Map<String, dynamic> json) =>
       _$TranslationResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TranslationResponseToJson(this);
 
   factory TranslationResponse.checkEmptyValues(TranslationResponse entity) {
     final String initialValue = entity.initialValue.isEmpty
@@ -107,6 +95,18 @@ class TranslationResponse extends Equatable {
       updatedAt: updatedAt,
     );
   }
+  final int id;
+  final String category;
+  final String locale;
+  final String key;
+  final String value;
+  final String initialValue;
+  final int maxLength;
+  final String createdAt;
+  final String updatedAt;
+  final bool isCustomizable;
+
+  Map<String, dynamic> toJson() => _$TranslationResponseToJson(this);
 
   TranslationResponse copyWith({
     int? id,
@@ -150,8 +150,6 @@ class TranslationResponse extends Equatable {
 
 @JsonSerializable()
 class TranslationListResponse extends Equatable {
-  final List<TranslationResponse> translations;
-  final int count;
 
   const TranslationListResponse({
     required this.translations,
@@ -160,6 +158,8 @@ class TranslationListResponse extends Equatable {
 
   factory TranslationListResponse.fromJson(Map<String, dynamic> json) =>
       _$TranslationListResponseFromJson(json);
+  final List<TranslationResponse> translations;
+  final int count;
 
   Map<String, dynamic> toJson() => _$TranslationListResponseToJson(this);
 
@@ -192,9 +192,6 @@ class TranslationListResponse extends Equatable {
 
 @JsonSerializable()
 class ErrorResponse extends Equatable {
-  final int status;
-  final String error;
-  final String message;
 
   const ErrorResponse({
     required this.status,
@@ -204,6 +201,9 @@ class ErrorResponse extends Equatable {
 
   factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
       _$ErrorResponseFromJson(json);
+  final int status;
+  final String error;
+  final String message;
 
   Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 
@@ -213,10 +213,10 @@ class ErrorResponse extends Equatable {
 
 // Custom exception classes
 class TranslationException implements Exception {
-  final String message;
-  final int? statusCode;
 
   const TranslationException(this.message, [this.statusCode]);
+  final String message;
+  final int? statusCode;
 
   @override
   String toString() => 'TranslationException: $message';
@@ -232,20 +232,20 @@ class TranslationNotFoundException extends TranslationException {
 
 // Local translation models
 class LocalTranslation extends Equatable {
-  final String key;
-  final String value;
 
   const LocalTranslation({required this.key, required this.value});
+  final String key;
+  final String value;
 
   @override
   List<Object?> get props => [key, value];
 }
 
 class CustomizableTranslation extends Equatable {
-  final String key;
-  final int maxLength;
 
   const CustomizableTranslation({required this.key, required this.maxLength});
+  final String key;
+  final int maxLength;
 
   @override
   List<Object?> get props => [key, maxLength];

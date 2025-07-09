@@ -476,7 +476,7 @@ class _TranslationManagementViewState
                                     ? Text(
                                         'CUSTOMIZABLE : ${translation.maxLength}',
                                       )
-                                    : Text('FIXED'),
+                                    : const Text('FIXED'),
                                 backgroundColor: Theme.of(
                                   context,
                                 ).colorScheme.onTertiary,
@@ -496,7 +496,7 @@ class _TranslationManagementViewState
                                 ? Text(
                               'CUSTOMIZABLE : ${translation.maxLength}',
                             )
-                                : Text('FIXED'),
+                                : const Text('FIXED'),
                             backgroundColor: Theme.of(
                               context,
                             ).colorScheme.onTertiary,

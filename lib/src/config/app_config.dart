@@ -9,8 +9,8 @@ class AppConfig {
   static const String apikey =
       'api-key-tenant-001-secret-12345'; // Replace with your actual API key
 
-  static const translationApiUrl = "$baseUrlBackend$pathUrlTranslations";
-  static const designApiUrl = "$baseUrlBackend$pathUrlDesign";
+  static const translationApiUrl = '$baseUrlBackend$pathUrlTranslations';
+  static const designApiUrl = '$baseUrlBackend$pathUrlDesign';
 
 
   static const String defaultCategory = 'common';

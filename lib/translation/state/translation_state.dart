@@ -21,14 +21,6 @@ class TranslationInitializing extends TranslationState {
 }
 
 class TranslationLoaded extends TranslationState {
-  final List<TranslationResponse> translations;
-  final List<TranslationResponse> filteredTranslations;
-  final Set<String> categories;
-  final Set<String> locales;
-  final String? selectedCategory;
-  final String? selectedLocale;
-  final String searchTerm;
-  final int totalCount;
 
   const TranslationLoaded({
     required this.translations,
@@ -40,6 +32,14 @@ class TranslationLoaded extends TranslationState {
     this.searchTerm = '',
     required this.totalCount,
   });
+  final List<TranslationResponse> translations;
+  final List<TranslationResponse> filteredTranslations;
+  final Set<String> categories;
+  final Set<String> locales;
+  final String? selectedCategory;
+  final String? selectedLocale;
+  final String searchTerm;
+  final int totalCount;
 
   TranslationLoaded copyWith({
     List<TranslationResponse>? translations,
@@ -77,20 +77,20 @@ class TranslationLoaded extends TranslationState {
 }
 
 class TranslationError extends TranslationState {
-  final String message;
-  final TranslationException? exception;
 
   const TranslationError(this.message, [this.exception]);
+  final String message;
+  final TranslationException? exception;
 
   @override
   List<Object?> get props => [message, exception];
 }
 
 class TranslationOperationSuccess extends TranslationState {
-  final String message;
-  final TranslationResponse? translation;
 
   const TranslationOperationSuccess(this.message, [this.translation]);
+  final String message;
+  final TranslationResponse? translation;
 
   @override
   List<Object?> get props => [message, translation];

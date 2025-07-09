@@ -17,7 +17,7 @@ class TranslationFileService {
           '${(kIsWeb || kIsWasm) ? '' : AppConfig.assetFolder}${AppConfig.translationsFolder}${category}_$currentLocale'
           '.json';
       final jsonString = await rootBundle.loadString(assetPath);
-      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
 
       categories.putIfAbsent(
         category,
@@ -45,7 +45,7 @@ class TranslationFileService {
           '${(kIsWeb || kIsWasm) ? '' : AppConfig.assetFolder}${AppConfig
           .translationsFolder}${category}_cust.json';
       final jsonString = await rootBundle.loadString(assetPath);
-      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
 
       customizable.putIfAbsent(
         category,
@@ -72,7 +72,7 @@ class TranslationFileService {
     try {
       // Load the asset manifest
       final manifestContent = await rootBundle.loadString('AssetManifest.json');
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+      final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
 
       // Filter translation files and extract category names
       final Set<String> categories = {};
@@ -104,7 +104,7 @@ class TranslationFileService {
     try {
       // Load the asset manifest
       final manifestContent = await rootBundle.loadString('AssetManifest.json');
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+      final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
 
       // Filter translation files and extract category names
       final Set<String> locales = {};
@@ -210,10 +210,6 @@ class TranslationFileService {
       print('Creating new file: $filePath content: $jsonMap');
 
     }
-
-    // Load the asset manifest
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
 
     return true;
   }

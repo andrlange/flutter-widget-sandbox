@@ -1,6 +1,7 @@
 import '../../widgetbook/services/locator.dart';
-export '../../widgetbook/services/locator.dart';
 import 'translation_service.dart';
+
+export '../../widgetbook/services/locator.dart';
 
 extension TranslationExtensions on String {
   Future<String> tr({

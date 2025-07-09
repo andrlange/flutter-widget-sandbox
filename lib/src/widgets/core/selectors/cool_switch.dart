@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'states/cool_switch_cubit.dart';
 import '../../../statemanagement/DisposableStatelessWidget.dart';
+import 'states/cool_switch_cubit.dart';
 
 class CoolSwitch extends DisposableStatelessWidget {
   CoolSwitch({this.initialValue = false, this.onValueChange, super.key});

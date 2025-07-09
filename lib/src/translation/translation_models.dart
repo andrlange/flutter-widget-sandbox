@@ -1,11 +1,4 @@
 class TranslationItem {
-  final String key;
-  final String value;
-  final String category;
-  final String locale;
-  final String defaultValue;
-  final bool isCustomizable;
-  final int maxLength;
 
   const TranslationItem({
     required this.key,
@@ -28,6 +21,13 @@ class TranslationItem {
       maxLength: json['maxLength'] as int,
     );
   }
+  final String key;
+  final String value;
+  final String category;
+  final String locale;
+  final String defaultValue;
+  final bool isCustomizable;
+  final int maxLength;
 
   Map<String, dynamic> toJson() {
     return {
@@ -42,15 +42,15 @@ class TranslationItem {
   }
 }
 
-class TranslationCategory {
-  final String name;
-  final Map<String, Map<String, String>> translations; // locale -> key -> value
+class TranslationCategory { // locale -> key -> value
 
 
   TranslationCategory({
     required this.name,
     Map<String, Map<String, String>>? translations,
   }) : translations = translations ?? {};
+  final String name;
+  final Map<String, Map<String, String>> translations;
 
   void addTranslation(String locale, String key, String value) {
     translations.putIfAbsent(locale, () => {});
@@ -75,15 +75,15 @@ class TranslationCategory {
   }
 }
 
-class CustomizableCategory {
-  final String name;
-  final Map<String, int> customizer; //  key -> value
+class CustomizableCategory { //  key -> value
 
 
   CustomizableCategory({
     required this.name,
     Map<String, int>? customizer,
   }) : customizer = customizer ?? {};
+  final String name;
+  final Map<String, int> customizer;
 
   void addCustomization(String key, int value) {
     customizer.putIfAbsent(key, () => value);

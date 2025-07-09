@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Disposer extends StatefulWidget {
-  final void Function() dispose;
   const Disposer({super.key, required this.dispose});
+  final void Function() dispose;
 
   @override
   DisposerState createState() {
@@ -13,7 +13,7 @@ class Disposer extends StatefulWidget {
 class DisposerState extends State<Disposer> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override

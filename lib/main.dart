@@ -9,7 +9,7 @@ void main() async {
   // Setup dependency injection
   await Locator.setup();
 
-  runApp(WidgetBookSandbox());
+  runApp(const WidgetBookSandbox());
 }
 
 

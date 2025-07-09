@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:widgetbook_example/src/translation/translated_text.dart';
+
 import '/src/responsive/responsive_extension.dart';
+import '../../../translation/translated_text.dart';
 
 
 /// A custom widget that represents a button with an icon and/or text,
@@ -25,10 +26,6 @@ import '/src/responsive/responsive_extension.dart';
 /// of 120.0 and a height of 40.0 in Desktop or Tablet Size and
 /// of 60.0 and a height of 40.0 in Mobile Size without Text
 class CoolActionButton extends StatelessWidget {
-  final VoidCallback _onPressed;
-  final ButtonActionType _buttonType;
-  final bool showText;
-  final bool showIcon;
 
   const CoolActionButton(
     this._onPressed,
@@ -37,33 +34,37 @@ class CoolActionButton extends StatelessWidget {
     this.showText = true,
     this.showIcon = true,
   });
+  final VoidCallback _onPressed;
+  final ButtonActionType _buttonType;
+  final bool showText;
+  final bool showIcon;
 
   @override
   Widget build(BuildContext context) {
-    String buttonText = "";
-    Icon icon = Icon(Icons.print);
+    var buttonText = '';
+    var icon = const Icon(Icons.print);
 
     switch (_buttonType) {
       case ButtonActionType.print:
-        buttonText = "print";
-        icon = Icon(Icons.print);
+        buttonText = 'print';
+        icon = const Icon(Icons.print);
         break;
       case ButtonActionType.add:
-        buttonText = "add";
-        icon = Icon(Icons.add);
+        buttonText = 'add';
+        icon = const Icon(Icons.add);
         break;
       case ButtonActionType.delete:
-        buttonText = "delete";
-        icon = Icon(Icons.delete);
+        buttonText = 'delete';
+        icon = const Icon(Icons.delete);
         break;
       case ButtonActionType.save:
-        buttonText = "save";
-        icon = Icon(Icons.save);
+        buttonText = 'save';
+        icon = const Icon(Icons.save);
         break;
     }
     if (!showText && !showIcon) {
-      buttonText = "ERROR!";
-      icon = Icon(Icons.help);
+      buttonText = 'ERROR!';
+      icon = const Icon(Icons.help);
     }
 
     return _buildButton(
@@ -76,10 +77,10 @@ class CoolActionButton extends StatelessWidget {
                   ? TranslatedText(
                       'action.button.$buttonText',
                     )
-                  : SizedBox.shrink()
-            : SizedBox.shrink(),
+                  : const SizedBox.shrink()
+            : const SizedBox.shrink(),
         icon: context.isTiny
-            ? Padding(padding: EdgeInsets.only(left: 14.0), child: icon)
+            ? Padding(padding: const EdgeInsets.only(left: 14.0), child: icon)
             : showIcon || (!showText && !showIcon)
             ? icon
             : null,
@@ -89,7 +90,7 @@ class CoolActionButton extends StatelessWidget {
   }
 
   Widget _buildButton(Widget child, BuildContext context) {
-    double width = 120.0;
+    var width = 120.0;
     if (context.isTiny) {
       width = 60.0;
     }

@@ -11,10 +11,25 @@ class CoolRadioGroupCubit<T> extends Cubit<CoolRadioGroupState> {
   Future<void> dispose() async {
     debugPrint('CoolRadioGroupCubit disposing');
 
-    super.close();
+    await super.close();
   }
 
-  void setValue(T newValue) {
-    emit(CoolRadioGroupValue(newValue: newValue));
+  void setValue(T? newValue) {
+
+    emit(CoolRadioGroupValue(newValue: _convertNull(newValue)));
+  }
+
+  Object _convertNull(T? value) {
+    final type = T.runtimeType;
+    switch(type){
+      case String:
+        return value?? '';
+      case int:
+        return value?? 0;
+      case double:
+        return value?? 0.0;
+      default:
+        return value?? '';
+    }
   }
 }

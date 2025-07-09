@@ -53,7 +53,7 @@ class DemoView extends StatelessWidget {
               initialColorSpace: ColorSpace.hex, initialValue: Colors.grey)
 
       ),
-      SizedBox(
+      const SizedBox(
         width: 250,
         height: 200,
         child: CoolRadioGroup(
@@ -95,7 +95,7 @@ class DemoView extends StatelessWidget {
           debugPrint('Floating Action Button clicked');
         },
         tooltip: 'Increment Counter',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

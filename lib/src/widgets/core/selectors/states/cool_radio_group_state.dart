@@ -8,9 +8,9 @@ sealed class CoolRadioGroupState extends Equatable {
 }
 
 final class CoolRadioGroupValue<T> extends CoolRadioGroupState {
-   final T newValue;
 
    const CoolRadioGroupValue({required this.newValue});
+   final T newValue;
 
    @override
    List<Object> get props => [?newValue];

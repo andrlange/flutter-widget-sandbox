@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../src/translation/translation_models.dart';
+
 import '/src/translation/translation_service.dart';
-import '../../widgetbook/services/locator.dart';
 import '../../src/translation/service/translation_models.dart';
+import '../../src/translation/translation_models.dart';
+import '../../widgetbook/services/locator.dart';
 
 part 'translation_event.dart';
-
 part 'translation_state.dart';
 
 class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
@@ -95,7 +95,7 @@ class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
       // final response = await _backendService.createTranslation(event.request);
 
       emit(
-        TranslationOperationSuccess(
+        const TranslationOperationSuccess(
           'Übersetzung erfolgreich erstellt',
           // response,
         ),
@@ -131,7 +131,7 @@ class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
           .category, event.request.locale, event.request.key);
       if (await _service.updateTranslation(event.request, initialValue)) {
         emit(
-          TranslationOperationSuccess(
+          const TranslationOperationSuccess(
             'Übersetzung erfolgreich aktualisiert',
             // response,
           ),

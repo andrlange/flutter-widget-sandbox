@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'service/translation_models.dart';
+import '../config/app_config.dart';
 import 'service/translation_backend_service.dart';
 import 'service/translation_file_service.dart';
-import '../config/app_config.dart';
+import 'service/translation_models.dart';
 import 'translation_models.dart';
 import 'translation_service_interface.dart';
+
 export 'translation_service_interface.dart';
 
 class TranslationService implements ITranslationService {
@@ -129,7 +130,7 @@ class TranslationService implements ITranslationService {
     );
 
     // Fetch translations from backend if not loaded yet and update cache
-    TranslationListResponse backendResult = await _backendService
+    var backendResult = await _backendService
         .getTranslationsByCategoryAndLocale(category, takeLocale, false);
 
     await _processBackendResult(backendResult, category, locale: takeLocale);
@@ -147,7 +148,7 @@ class TranslationService implements ITranslationService {
     String category, {
     String? locale,
   }) async {
-    final String takeLocale = locale ?? _currentLocale;
+    final takeLocale = locale ?? _currentLocale;
     print('Processing backend result for category: $category, locale: $takeLocale');
 
     if (_backendTranslations[category] == null) {

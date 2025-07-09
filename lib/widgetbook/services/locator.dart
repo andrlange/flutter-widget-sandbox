@@ -1,5 +1,6 @@
-import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
 import '../../src/config/app_config.dart';
 import '../../src/translation/translation_service.dart';
 
@@ -19,7 +20,7 @@ class Locator {
     );
 
     // Initialize the translation service
-    ITranslationService service = locator<ITranslationService>();
+    var service = locator<ITranslationService>();
     await service.initialize();
     debugPrint('Translation service initializing...');
     await service.loadCategory('common', locale: 'de');
