@@ -4,9 +4,10 @@ import 'package:widgetbook_example/src/widgets/core/selectors/states/cool_switch
 import '../../../statemanagement/DisposableStatelessWidget.dart';
 
 class CoolSwitch extends DisposableStatelessWidget {
-   CoolSwitch({this.initialValue = false, super.key});
+  CoolSwitch({this.initialValue = false, this.onValueChange, super.key});
 
   final bool initialValue;
+  final BoolCallBack? onValueChange;
   late final CoolSwitchCubit _cubit;
 
   @override
@@ -15,11 +16,9 @@ class CoolSwitch extends DisposableStatelessWidget {
     super.onDispose();
   }
 
-  bool get value => _cubit.value;
-
   @override
   Widget build(BuildContext context) {
-    _cubit = CoolSwitchCubit(initialValue: initialValue);
+    _cubit = CoolSwitchCubit(initialValue: initialValue, onValueChange: onValueChange);
 
     return BlocProvider<CoolSwitchCubit>.value(
       value: _cubit,
@@ -27,7 +26,7 @@ class CoolSwitch extends DisposableStatelessWidget {
         builder: (context, state) {
           return Switch(
             value: (state is SwitchToggleState) ? state.value : false,
-            onChanged: _cubit.onValueChange,
+            onChanged: _cubit.onSwitching,
           );
         },
       ),

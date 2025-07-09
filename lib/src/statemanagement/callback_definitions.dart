@@ -1,0 +1,3 @@
+
+
+typedef BoolCallBack = void Function(bool value);

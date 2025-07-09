@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook_example/src/translation/translated_text.dart';
 import '/src/responsive/responsive_extension.dart';
-import '/src/translation/translation_extension.dart';
 
 
 /// A custom widget that represents a button with an icon and/or text,

@@ -12,6 +12,7 @@ Widget buildWidget(BuildContext context) {
         description: 'Set initial value',
         initialValue: false,
       ),
+      onValueChange: (value) => print('Cool Switch value changed: $value'),
     ),
   );
 }
