@@ -17,6 +17,7 @@ analyzer:
     - "macos/**"
     - "windows/**"
     - "linux/**"
+    - "backend/**"
 
   # Enable additional language features
   language:
