@@ -1,58 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:retrofit/retrofit.dart';
 
-import '../../config/app_config.dart';
-import 'translation_models.dart';
+import '../config/app_config.dart';
+import '../translation/service/translation_api_client.dart';
+import '../translation/service/translation_models.dart';
 
-part 'translation_backend_service.g.dart';
+class BackendService {
 
-@RestApi(baseUrl: AppConfig.translationApiUrl)
-abstract class TranslationApiClient {
-  factory TranslationApiClient(Dio dio, {String baseUrl}) =
-      _TranslationApiClient;
-
-  @POST("")
-  Future<TranslationResponse> createTranslation(
-    @Body() CreateTranslationRequest request,
-  );
-
-  @PUT("")
-  Future<TranslationResponse> updateTranslation(
-    @Body() UpdateTranslationRequest request,
-  );
-
-  @DELETE('')
-  Future<void> deleteTranslation(
-    @Query('category') String category,
-    @Query('locale') String locale,
-    @Query("key") String key,
-  );
-
-  @GET('/single')
-  Future<TranslationResponse> getTranslation(
-    @Query('category') String category,
-    @Query('locale') String locale,
-    @Query('key') String key,
-    @Query('initialValue') bool initialValue,
-  );
-
-  @GET('/category')
-  Future<TranslationListResponse> getTranslationsByCategoryAndLocale(
-    @Query('category') String category,
-    @Query('locale') String locale,
-    @Query('initialValue') bool initialValue,
-  );
-
-  @GET('/locale')
-  Future<TranslationListResponse> getTranslationsByLocale(
-    @Query('locale') String locale,
-    @Query('initialValue') bool initialValue,
-  );
-}
-
-class TranslationBackendService {
-
-  TranslationBackendService(this._fallbackLocale) {
+  BackendService(this._fallbackLocale) {
     _dio = Dio();
     _setupDio();
     _apiClient = TranslationApiClient(_dio);
@@ -106,7 +60,7 @@ class TranslationBackendService {
       case 409:
         return TranslationAlreadyExistsException(
           errorMessage ?? 'Translation bereits '
-          'vorhanden',
+              'vorhanden',
         );
       case 404:
         return TranslationNotFoundException(
@@ -134,10 +88,10 @@ class TranslationBackendService {
   }
 
   Future<TranslationListResponse> getTranslationsByCategoryAndLocale(
-    String category,
-    String locale,
-    bool initialValue,
-  ) async {
+      String category,
+      String locale,
+      bool initialValue,
+      ) async {
     try {
       final response = await _apiClient.getTranslationsByCategoryAndLocale(
         category,
@@ -148,7 +102,7 @@ class TranslationBackendService {
     } on TranslationException catch (e) {
       print(
         'TranslationBackendService: Error getting translations by '
-        'category and locale: ${e.message}',
+            'category and locale: ${e.message}',
       );
     }
 

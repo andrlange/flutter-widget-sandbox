@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import '../config/app_config.dart';
-import 'service/translation_backend_service.dart';
+import '../service/backend_service.dart';
 import 'service/translation_file_service.dart';
 import 'service/translation_models.dart';
 import 'translation_models.dart';
@@ -14,7 +14,7 @@ class TranslationService implements ITranslationService {
   static const String _fallbackLocale = AppConfig.fallbackLocale;
 
   final TranslationFileService _fileService = TranslationFileService();
-  final TranslationBackendService _backendService = TranslationBackendService(
+  final BackendService _backendService = BackendService(
     _fallbackLocale,
   );
 
