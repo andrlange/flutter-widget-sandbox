@@ -28,6 +28,7 @@ dependencies:
   retrofit: ^4.5.0
   logger: ^2.6.0
   path_provider: ^2.1.5
+  provider: ^6.1.5
 
 dev_dependencies:
   flutter_test:
