@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 import '../src/config/app_config.dart';
+import '../src/theming/app_theme.dart';
 import '../src/translation/translated_text.dart';
 import '../widgetbook/devices/cool_devices.dart';
 import 'widgetbook.directories.g.dart';
@@ -49,8 +50,8 @@ class WidgetBookSandbox extends StatelessWidget {
           addons: [
             MaterialThemeAddon(
               themes: [
-                WidgetbookTheme(name: 'dark', data: ThemeData.dark()),
-                WidgetbookTheme(name: 'light', data: ThemeData.light()),
+                WidgetbookTheme(name: 'dark', data: AppTheme.darkTheme()),
+                WidgetbookTheme(name: 'light', data:  AppTheme.lightTheme()),
               ],
             ),
             DeviceFrameAddon(
